@@ -5,7 +5,7 @@
         <td width="125px" style="font-size: 80px;border-color: white;" rowspan="3">HY</td>
         <td width="450px" style="border-color: white;font-size: 24px;" colspan="5">佛山市顺德区浩研研磨材料有限公司</td>
         <td style="border-color: white;text-align: left;"></td>
-        <td width="210px" style="border-color: white;text-align: left;">NO:20240618001</td>
+        <td width="210px" style="border-color: white;text-align: left;">NO: {{ orderDateStr + order.id }}</td>
       </tr>
       <tr>
         <td colspan="5" style="border-color: white;"></td>
@@ -19,7 +19,7 @@
       <tr>
         <td style="text-align: left;border-right-color: white;border-left-color: white; border-top-color: white;" colspan="6">购货单位: {{ order.customer_title }}</td>
         <td style="border-right-color: white;border-left-color: white; border-top-color: white;"></td>
-        <td style="text-align: left; border-right-color: white;border-left-color: white; border-top-color: white;">日期: {{ order.delivery_date }}</td>
+        <td style="text-align: left; border-right-color: white;border-left-color: white; border-top-color: white;">日期: {{ deliveryDateStr }}</td>
       </tr>
       <tr style="height: 25px;">
         <td>货品名称</td>
@@ -44,9 +44,9 @@
       </tr>
       <tr style="height: 25px;">
         <td>合计金额大写:</td>
-        <td colspan="3">壹万壹仟</td>
+        <td colspan="3">{{ cnMoneyFormat }}</td>
         <td>小计</td>
-        <td>11000</td>
+        <td>{{ order.total_price }}</td>
         <td></td>
         <td></td>
       </tr>
@@ -97,11 +97,24 @@
 <script>
 /** eslint-disable */
 import { getOrderDetail } from '@/api/order'
+import { cnMoneyFormat } from '@/utils/price'
+
 export default {
   data() {
     return {
       id: this.$route.query.id,
       order: {}
+    }
+  },
+  computed: {
+    orderDateStr() {
+      return this.$moment(this.order.created_at).format('YYYYMMDD')
+    },
+    deliveryDateStr() {
+      return this.$moment(this.order.delivery_date).format('YYYY年MM月DD日')
+    },
+    cnMoneyFormat() {
+      return cnMoneyFormat(this.order.total_price)
     }
   },
   mounted() {
@@ -124,8 +137,7 @@ export default {
 
 <style scoped>
 .delivery-container {
-  width: 241mm;
-  border: 1px solid #000;
+  /* width: 250mm; */
   box-sizing: border-box;
   margin: 0 auto;
   padding: 0.594cm;

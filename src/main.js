@@ -6,6 +6,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import '@/styles/index.scss' // global css
+import moment from 'moment'
 
 import App from './App'
 import store from './store'
@@ -33,6 +34,7 @@ if (process.env.NODE_ENV === 'production') {
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
 Vue.use(Loading.directive)
+Vue.prototype.$moment = moment
 
 Vue.config.productionTip = false
 

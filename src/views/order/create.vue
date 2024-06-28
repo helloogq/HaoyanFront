@@ -21,6 +21,7 @@
                 reserve-keyword
                 placeholder="请输入关键词"
                 :remote-method="remoteMethod"
+                @focus="handleCustomerFocus"
                 @change="handleCustomerChange"
               >
                 <el-option
@@ -90,7 +91,7 @@
           </el-row>
         </el-form-item>
         <el-form-item label="送货日期:">
-          <el-date-picker v-model="form.delivery_date" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd 00:00:00" type="date" placeholder="选择日期" />
+          <el-date-picker v-model="form.delivery_date" format="yyyy-MM-dd hh:mm:ss" value-format="yyyy-MM-dd hh:mm:ss" type="date" placeholder="选择日期" />
         </el-form-item>
         <el-form-item label="订单备注:">
           <el-input v-model="form.remark" type="textarea" />
@@ -175,15 +176,7 @@ export default {
   data() {
     return {
       rules: {
-        customer_id: [{ required: true, message: '请选择客户', trigger: 'change' }],
-        delivery_date: [{ required: true, message: '请选择交货日期', trigger: 'change' }],
-        delivery_address_name: [{ required: true, message: '请输入收货人姓名', trigger: 'blur' }],
-        delivery_address_phone: [{ required: true, message: '请输入收货人电话', trigger: 'blur' }],
-        delivery_address_province: [{ required: true, message: '请选择收货地址', trigger: 'change' }],
-        delivery_address_city: [{ required: true, message: '请选择收货地址', trigger: 'change' }],
-        delivery_address_district: [{ required: true, message: '请选择收货地址', trigger: 'change' }],
-        delivery_address_detail: [{ required: true, message: '请输入详细地址', trigger: 'blur' }],
-        remark: [{ required: true, message: '请输入交货备注', trigger: 'blur' }],
+        customer_title: [{ required: true, message: '请选择客户', trigger: 'change' }],
         products: [{ required: true, message: '请选择产品', trigger: 'change' }]
       },
       customerList: [],
@@ -205,7 +198,7 @@ export default {
         products: [],
         customer_id: 0,
         customer_title: '',
-        delivery_date: '',
+        delivery_date: this.$moment().format('YYYY-MM-DD HH:mm:ss'),
         delivery_remark: '',
         delivery_address_name: '',
         delivery_address_phone: '',
@@ -267,6 +260,10 @@ export default {
       getArea({ parent_id: 0 }).then(response => {
         this.provinceList = response.data
       })
+    },
+    handleCustomerFocus(str) {
+      console.log(str)
+      this.getCustomerList({})
     },
     handleProvinceChange(value) {
       this.form.delivery_address_city_id = null
@@ -370,8 +367,11 @@ export default {
     },
     handleCustomerChange(value) {
     },
-    remoteMethod(query) {
-      getCustomerList({ title: query }).then(response => {
+    remoteMethod(str) {
+      this.getCustomerList({ title: str })
+    },
+    getCustomerList(query) {
+      getCustomerList(query).then(response => {
         this.customerList = response.data.data
         this.customerList.forEach(item => {
           item.value = item.title
