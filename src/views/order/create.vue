@@ -2,12 +2,6 @@
   <div class="app-container">
     <div class="page-block">
       <el-form ref="ruleForm" :rules="rules" :model="form" label-width="100px">
-        <el-form-item>
-          <el-radio-group v-model="customer_type" @input="handleCustomerTypeChange">
-            <el-radio-button label="已建档客户" />
-            <el-radio-button label="未建档客户" />
-          </el-radio-group>
-        </el-form-item>
         <el-row>
           <el-col :span="6">
             <el-form-item label="客户公司:" prop="customer_title">
@@ -58,7 +52,7 @@
           <el-row>
             <el-col :span="10">
 
-              <el-select v-model="form.delivery_address_province_id" placeholder="请选择省份" @change="handleProvinceChange">
+              <el-select v-model="form.delivery_address_province" placeholder="请选择省份" @change="handleProvinceChange">
                 <el-option
                   v-for="item in provinceList"
                   :key="item.area_id"
@@ -67,7 +61,7 @@
                 />
               </el-select>
 
-              <el-select v-model="form.delivery_address_city_id" placeholder="请选择城市" @change="handleCityChange">
+              <el-select v-model="form.delivery_address_city" placeholder="请选择城市" @change="handleCityChange">
                 <el-option
                   v-for="item in cityList"
                   :key="item.area_id"
@@ -76,7 +70,7 @@
                 />
               </el-select>
 
-              <el-select v-model="form.delivery_address_district_id" placeholder="请选择区县" @change="handleDistrictChange">
+              <el-select v-model="form.delivery_address_district" placeholder="请选择区县" @change="handleDistrictChange">
                 <el-option
                   v-for="item in districtList"
                   :key="item.area_id"
@@ -204,10 +198,7 @@ export default {
         delivery_address_phone: '',
         delivery_address_remark: '',
         delivery_address_province: '',
-        delivery_address_province_id: '',
         delivery_address_city: '',
-        delivery_address_city_id: '',
-        delivery_address_district_id: '',
         delivery_address_district: '',
         delivery_address_detail: '',
         remark: '',
@@ -266,9 +257,7 @@ export default {
       this.getCustomerList({})
     },
     handleProvinceChange(value) {
-      this.form.delivery_address_city_id = null
       this.form.delivery_address_city = ''
-      this.form.delivery_address_district_id = null
       this.form.delivery_address_district = ''
       this.cityList = []
       this.districtList = []
@@ -281,15 +270,15 @@ export default {
     },
     handleCityChange() {
       this.cityList.forEach(item => {
-        if (item.area_id === this.form.delivery_address_city_id) {
+        if (item.area_id === this.form.delivery_address_city) {
           this.form.delivery_address_city = item.name
         }
       })
-      this.getDistrict(this.form.delivery_address_city_id)
+      this.getDistrict(this.form.delivery_address_city)
     },
     handleDistrictChange() {
       this.districtList.forEach(item => {
-        if (item.area_id === this.form.delivery_address_district_id) {
+        if (item.area_id === this.form.delivery_address_district) {
           this.form.delivery_address_district = item.name
         }
       })
