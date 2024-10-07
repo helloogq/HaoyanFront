@@ -6,7 +6,9 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    introduction: '', // 新增
+    roles: [] // 新增
   }
 }
 
@@ -19,11 +21,19 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
+  // 新增
+  SET_INTRODUCTION: (state, introduction) => {
+    state.introduction = introduction
+  },
   SET_NAME: (state, name) => {
     state.name = name
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  // 新增
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   }
 }
 
@@ -44,7 +54,7 @@ const actions = {
     })
   },
 
-  // get user info
+  // get user info   // 新增
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
@@ -54,10 +64,18 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
+        const { roles, name, avatar, introduction } = data
 
+        // 必须保证不是一个空的数组
+        if (!roles || roles.length <= 0) {
+          reject('getInfo: roles must be a non-null array')
+        }
+        console.log(roles)
+        // 存储值
+        commit('SET_ROLES', roles)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
+        commit('SET_INTRODUCTION', introduction)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -69,6 +87,9 @@ const actions = {
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
+        // 新增
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
@@ -82,6 +103,9 @@ const actions = {
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
+      // 新增
+      commit('SET_TOKEN', '')
+      commit('SET_ROLES', [])
       removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()

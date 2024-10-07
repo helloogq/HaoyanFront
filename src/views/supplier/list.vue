@@ -19,20 +19,17 @@
           icon="el-icon-edit"
           @click="handleCreate"
         >
-          添加客户
+          添加供应商
         </el-button>
       </div>
       <el-table :data="list" fit border highlight-current-row style="width: 100%">
-        <el-table-column label="客户ID" width="100" prop="id" />
-        <el-table-column label="客户名称" prop="title" />
-        <el-table-column label="客户联系人" prop="contact" />
-        <el-table-column label="客户联系号码" prop="contact_phone" />
-        <el-table-column label="客户联系地址" prop="contact_address" />
+        <el-table-column label="供应商ID" width="100" prop="id" />
+        <el-table-column label="供应商名称" prop="title" />
         <el-table-column label="创建时间" prop="created_at" />
         <el-table-column label="更新时间" prop="updated_at" />
         <el-table-column label="操作" width="250">
           <template slot-scope="{row}">
-            <!-- <el-button type="primary" size="mini" style="margin-right: 5px;" @click="handleDetail(row)">详情</el-button> -->
+            <el-button type="primary" size="mini" style="margin-right: 5px;" @click="handleDetail(row)">详情</el-button>
             <el-button type="primary" size="mini" style="margin-right: 5px;" @click="handleUpdate(row)">编辑</el-button>
             <el-popconfirm title="这是一段内容确定删除吗？" style="margin-right: 5px;" @onConfirm="handleDelete(row)">
               <el-button slot="reference" type="danger" size="mini">删除</el-button>
@@ -53,19 +50,19 @@
           @current-change="handleCurrentChange"
         />
       </div>
-      <el-dialog title="添加客户" :visible.sync="dialogCreateFormVisible">
+      <el-dialog title="添加供应商" :visible.sync="dialogCreateFormVisible">
         <el-form :model="form">
-          <el-form-item label="客户名称" :label-width="formLabelWidth">
+          <el-form-item label="供应商名称" :label-width="formLabelWidth">
             <el-input v-model="form.title" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="客户联系人" :label-width="formLabelWidth">
-            <el-input v-model="updateForm.contact" type="text" autocomplete="off" />
+          <el-form-item label="供应商联系人" :label-width="formLabelWidth">
+            <el-input v-model="form.contact" type="text" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="客户联系号码" :label-width="formLabelWidth">
-            <el-input v-model="updateForm.contact_phone" type="text" autocomplete="off" />
+          <el-form-item label="供应商联系号码" :label-width="formLabelWidth">
+            <el-input v-model="form.contact_phone" type="text" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="客户联系地址" :label-width="formLabelWidth">
-            <el-input v-model="updateForm.contact_address" type="text" autocomplete="off" />
+          <el-form-item label="供应商联系地址" :label-width="formLabelWidth">
+            <el-input v-model="form.contact_address" type="text" autocomplete="off" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -74,18 +71,18 @@
         </div>
       </el-dialog>
 
-      <el-dialog title="编辑客户" :visible.sync="dialogUpdateFormVisible">
+      <el-dialog title="编辑供应商" :visible.sync="dialogUpdateFormVisible">
         <el-form :model="updateForm">
-          <el-form-item label="客户名称" :label-width="formLabelWidth">
+          <el-form-item label="供应商名称" :label-width="formLabelWidth">
             <el-input v-model="updateForm.title" type="text" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="客户联系人" :label-width="formLabelWidth">
+          <el-form-item label="供应商联系人" :label-width="formLabelWidth">
             <el-input v-model="updateForm.contact" type="text" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="客户联系号码" :label-width="formLabelWidth">
+          <el-form-item label="供应商联系号码" :label-width="formLabelWidth">
             <el-input v-model="updateForm.contact_phone" type="text" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="客户联系地址" :label-width="formLabelWidth">
+          <el-form-item label="供应商联系地址" :label-width="formLabelWidth">
             <el-input v-model="updateForm.contact_address" type="text" autocomplete="off" />
           </el-form-item>
         </el-form>
@@ -112,20 +109,22 @@ export default {
         title: '',
         page: 1,
         limit: 20,
-        is_supplider: 0
+        is_supplier: 1
       },
       form: {
         title: '',
         contact: '',
         contact_phone: '',
-        contact_address: ''
+        contact_address: '',
+        is_supplier: 1
       },
       updateForm: {
         id: '',
         title: '',
         contact: '',
         contact_phone: '',
-        contact_address: ''
+        contact_address: '',
+        is_supplier: 1
       },
       dialogCreateFormVisible: false,
       dialogUpdateFormVisible: false,
